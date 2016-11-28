@@ -44,7 +44,7 @@ public class ArtistEndpoint {
         ArtistData mapper = sqlSession.getMapper(ArtistData.class);
         return mapper.selectById(id);
     }
-
+    //Jenkoso
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})

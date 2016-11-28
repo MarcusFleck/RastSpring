@@ -17,7 +17,15 @@ import java.util.GregorianCalendar;
 public class LocalDateTimeHandler extends BaseTypeHandler<LocalDateTime>{
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, LocalDateTime parameter, JdbcType jdbcType) throws SQLException {
-        ps.setTimestamp(i, Timestamp.valueOf(parameter), GregorianCalendar.from(ZonedDateTime.of(parameter, ZoneId.systemDefault())));
+        ps.setTimestamp(
+                i, Timestamp.valueOf(parameter),
+                GregorianCalendar.from(
+                        ZonedDateTime.of(
+                                parameter,
+                                ZoneId.systemDefault()
+                        )
+                )
+        );
     }
 
     @Override
