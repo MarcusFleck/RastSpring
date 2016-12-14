@@ -2,17 +2,15 @@ package com.demorest.endpoint;
 
 import com.demorest.connection.MyBatisConnectionFactory;
 import com.demorest.database.ArtistData;
-import com.demorest.entity.Artist;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import com.demorest.entity.ArtistProto;
+import com.demorest.entity.ArtistProto.*;
+import com.demorest.tools.ProtoBinder;
+import com.pakulov.jersey.protobuf.internal.MediaTypeExt;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
@@ -20,65 +18,52 @@ import java.util.List;
  * Created by marcus on 09/11/2016.
  */
 
-@Path("/artists")
-@Api(value = "Artists",description = "Artists CRUD")
-public class ArtistEndpoint {
+@Path("/proto")
+public class ArtistEndpointProto {
     @Context
     UriInfo uriInfo;
-
-    Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
     MyBatisConnectionFactory myBatisConnectionFactory;
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Consultar artistas, ordenado por Rate", response = Artist.class, responseContainer = "List")
-    public List<Artist> getArtist() throws Exception {
-        logger.warn("sdsds");
-        logger.fatal("BOMB!!!");
+    @Produces(MediaTypeExt.APPLICATION_PROTOBUF)
+    public ArtistList getArtist() throws Exception {
         SqlSession sqlSession = myBatisConnectionFactory.getSqlSessionFactory().openSession();
         ArtistData mapper = sqlSession.getMapper(ArtistData.class);
-        return mapper.select();
+        return ProtoBinder.bindFromList(mapper.select());
     }
 
     @GET
     @Path("/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Consultar artista pelo numero de ID", response = Artist.class, responseContainer = "Artist")
-    @Cacheable("Artists")
+    @Produces(MediaTypeExt.APPLICATION_PROTOBUF)
     public Artist getArtistById(@PathParam("id") int id) throws Exception {
-        logger.warn("Still not caching");
         SqlSession sqlSession = myBatisConnectionFactory.getSqlSessionFactory().openSession();
         ArtistData mapper = sqlSession.getMapper(ArtistData.class);
-        return mapper.selectById(id);
+        return ProtoBinder.bindFromObject(mapper.selectById(id));
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Cadastrar novo artista")
+    @Consumes(MediaTypeExt.APPLICATION_PROTOBUF)
+    @Produces(MediaTypeExt.APPLICATION_PROTOBUF)
     public void setArtist(Artist artist) throws Exception {
-        System.out.println(artist);
         SqlSession sqlSession = myBatisConnectionFactory.getSqlSessionFactory().openSession();
         ArtistData mapper = sqlSession.getMapper(ArtistData.class);
-        mapper.insert(artist);
+        mapper.insert(ProtoBinder.bindFromProto(artist));
     }
 
     @PUT
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Atualizar dados do artista")
+    @Consumes(MediaTypeExt.APPLICATION_PROTOBUF)
+    @Produces(MediaTypeExt.APPLICATION_PROTOBUF)
     public void updateArtist(Artist artist) throws Exception {
         SqlSession sqlSession = myBatisConnectionFactory.getSqlSessionFactory().openSession();
         ArtistData mapper = sqlSession.getMapper(ArtistData.class);
-        mapper.update(artist);
+        mapper.update(ProtoBinder.bindFromProto(artist));
     }
 
     @DELETE
     @Path("/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Deletar artista por ID")
+    @Produces(MediaTypeExt.APPLICATION_PROTOBUF)
     public void deleteArtist(@PathParam("id") int id) throws Exception {
         SqlSession sqlSession = myBatisConnectionFactory.getSqlSessionFactory().openSession();
         ArtistData mapper = sqlSession.getMapper(ArtistData.class);

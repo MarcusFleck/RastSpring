@@ -1,0 +1,13 @@
+option java_outer_classname = "ArtistProto";
+
+message ArtistList {
+    repeated Artist artist = 1;
+}
+
+message Artist {
+    optional int32 id = 1;
+    required string firstName = 2;
+    required string lastName = 3;
+    required int32 rate = 4;
+    optional string date = 5; //yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+}

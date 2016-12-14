@@ -33,15 +33,17 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web:1.4.2.RELEASE")
 	compile("org.springframework.boot:spring-boot-starter-jetty:1.4.2.RELEASE")
 	compile('org.springframework.boot:spring-boot-starter-jersey')
-
+    compile 'net.sf.ehcache:ehcache-core:2.6.11'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.4.RELEASE'
 	compile group: 'org.glassfish.jersey.test-framework', name: 'jersey-test-framework-core', version: '2.24'
 	compile group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-grizzly2', version: '2.24'
-
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.1.0'
 	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1')
 	compile("io.swagger:swagger-jersey2-jaxrs:1.5.10")
 	compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.8.4'
 	compile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
-
+    compile group: 'com.googlecode.protobuf-java-format', name: 'protobuf-java-format', version: '1.4'
+    compile 'com.pakulov.jersey.media:jersey-media-protobuf:0.1.0'
 	runtime('mysql:mysql-connector-java')
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')

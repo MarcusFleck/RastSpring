@@ -19,7 +19,7 @@ public interface ArtistData {
     })
 
     @Select("Select * from artist order by rate DESC")
-    public List<Artist> selectAll();
+    public List<Artist> select();
 
     @Results({
             @Result(property = "id", column = "id"),
